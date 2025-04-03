@@ -41,7 +41,7 @@ class Answer:
             'secret': conf.get("main", "secret"),
             'key_session': conf.get("main", "key_session"),
             'xweb_xhr': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF XWEB/8431',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090217)XWEB/11581',
             'Content-Type': 'application/json',
             'Accept': '*/*',
             'Sec-Fetch-Site': 'cross-site',
@@ -109,7 +109,7 @@ class Answer:
             print("  题目通过。")
         return True
     def start(self, pages):
-        for page in range(1,pages+1):
+        for page in range(pages,pages+5):
             passagelist = json.loads(self.session.post(url=self.url+f"/scReports/api/wx/netlearning/page/{page}/10", data=json.dumps(self.data)).text)
             for passage in passagelist["data"]["list"]:
                 print("当前文章："+passage["id"])
@@ -126,17 +126,18 @@ class Answer:
                         return
 if __name__ == "__main__":
     print("----脚本开始----")
-    print("首先现在只支持文章自动答题，视频理论上是一样的，\n但我实在忍受不了看3分钟视频去抓包测试，你可以自己试试看把视频用一样的方式处理")
-    print("(改代码一个跳转就OK了，但我没测试能不能过先不说话)\n")
+    print("支持文章自动答题，视频暂无，\n modify: MAR 23 2025 \n")
+    print("start函数处修改，可以手动确定起始位置")
+    print("似乎要每周重新抓包，conf文件里两个值会变\n")
     print("secret="+conf.get("main", "secret")+"\n")
     print("key_session="+conf.get("main", "key_session")+"\n")
     c = input("确认无误开始: [y/n]")
     if c == 'y':
         try:
             ans = Answer()
-            page = input("请输入最大搜索的页码：(直接回车就是2页)")
+            page = input("请输入搜索的起始页码，搜索范围5页：")
             if(page == ""):
-                ans.start(2)
+                ans.start(32)
             else:
                 ans.start(int(page))
             print("成功！")
